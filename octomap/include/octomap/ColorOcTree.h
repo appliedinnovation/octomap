@@ -36,6 +36,8 @@
 
 
 #include <iostream>
+#include <iomanip>
+#include <algorithm>
 #include <octomap/OcTreeNode.h>
 #include <octomap/OccupancyOcTreeBase.h>
 

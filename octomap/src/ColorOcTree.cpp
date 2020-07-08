@@ -218,9 +218,9 @@ namespace octomap {
           end=this->end_tree(); it!= end; ++it) {
       if (!it.isLeaf() || !this->isNodeOccupied(*it)) continue;
       ColorOcTreeNode::Color& c = it->getColor();
-      ++histogram_r[c.r];
-      ++histogram_g[c.g];
-      ++histogram_b[c.b];
+      ++histogram_r[(unsigned int)(std::max(0.f, std::min(c.r, 1.f)) * 255.0)];
+      ++histogram_g[(unsigned int)(std::max(0.f, std::min(c.g, 1.f)) * 255.0)];
+      ++histogram_b[(unsigned int)(std::max(0.f, std::min(c.b, 1.f)) * 255.0)];
     }
     // plot data
     FILE *gui = popen("gnuplot ", "w");
@@ -251,7 +251,7 @@ namespace octomap {
   }
 
   std::ostream& operator<<(std::ostream& out, ColorOcTreeNode::Color const& c) {
-    return out << '(' << (unsigned int)c.r << ' ' << (unsigned int)c.g << ' ' << (unsigned int)c.b << ')';
+    return out << std::setprecision(2) << '(' << c.r << ' ' << c.g << ' ' << c.b << ')';
   }
 
 
