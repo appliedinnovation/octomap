@@ -52,10 +52,10 @@ namespace octomap {
   }
 
   ColorOcTreeNode::Color ColorOcTreeNode::getAverageChildColor() const {
-    int mr = 0;
-    int mg = 0;
-    int mb = 0;
-    int c = 0;
+    float mr = 0;
+    float mg = 0;
+    float mb = 0;
+    float c = 0;
 
     if (children != NULL){
       for (int i=0; i<8; i++) {
@@ -74,10 +74,10 @@ namespace octomap {
       mr /= c;
       mg /= c;
       mb /= c;
-      return Color((uint8_t) mr, (uint8_t) mg, (uint8_t) mb);
+      return Color((float) mr, (float) mg, (float) mb);
     }
     else { // no child had a color other than white
-      return Color(255, 255, 255);
+      return Color(1.0, 1.0, 1.0);
     }
   }
 
@@ -94,9 +94,9 @@ namespace octomap {
   };
 
   ColorOcTreeNode* ColorOcTree::setNodeColor(const OcTreeKey& key,
-                                             uint8_t r,
-                                             uint8_t g,
-                                             uint8_t b) {
+                                             float r,
+                                             float g,
+                                             float b) {
     ColorOcTreeNode* n = search (key);
     if (n != 0) {
       n->setColor(r, g, b);
@@ -144,14 +144,14 @@ namespace octomap {
   }
 
   ColorOcTreeNode* ColorOcTree::averageNodeColor(const OcTreeKey& key,
-                                                 uint8_t r,
-                                                 uint8_t g,
-                                                 uint8_t b) {
+                                                 float r,
+                                                 float g,
+                                                 float b) {
     ColorOcTreeNode* n = search(key);
     if (n != 0) {
       if (n->isColorSet()) {
         ColorOcTreeNode::Color prev_color = n->getColor();
-        n->setColor((prev_color.r + r)/2, (prev_color.g + g)/2, (prev_color.b + b)/2);
+        n->setColor((prev_color.r + r)/2., (prev_color.g + g)/2., (prev_color.b + b)/2.);
       }
       else {
         n->setColor(r, g, b);
@@ -161,19 +161,19 @@ namespace octomap {
   }
 
   ColorOcTreeNode* ColorOcTree::integrateNodeColor(const OcTreeKey& key,
-                                                   uint8_t r,
-                                                   uint8_t g,
-                                                   uint8_t b) {
+                                                   float r,
+                                                   float g,
+                                                   float b) {
     ColorOcTreeNode* n = search (key);
     if (n != 0) {
       if (n->isColorSet()) {
         ColorOcTreeNode::Color prev_color = n->getColor();
         double node_prob = n->getOccupancy();
-        uint8_t new_r = (uint8_t) ((double) prev_color.r * node_prob
+        float new_r = (float) ((double) prev_color.r * node_prob
                                                +  (double) r * (0.99-node_prob));
-        uint8_t new_g = (uint8_t) ((double) prev_color.g * node_prob
+        float new_g = (float) ((double) prev_color.g * node_prob
                                                +  (double) g * (0.99-node_prob));
-        uint8_t new_b = (uint8_t) ((double) prev_color.b * node_prob
+        float new_b = (float) ((double) prev_color.b * node_prob
                                                +  (double) b * (0.99-node_prob));
         n->setColor(new_r, new_g, new_b);
       }

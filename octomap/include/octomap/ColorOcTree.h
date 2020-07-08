@@ -51,8 +51,8 @@ namespace octomap {
     
     class Color {
     public:
-    Color() : r(255), g(255), b(255) {}
-    Color(uint8_t _r, uint8_t _g, uint8_t _b) 
+    Color() : r(1.0), g(1.0), b(1.0) {}
+    Color(float _r, float _g, float _b) 
       : r(_r), g(_g), b(_b) {}
       inline bool operator== (const Color &other) const {
         return (r==other.r && g==other.g && b==other.b);
@@ -60,7 +60,7 @@ namespace octomap {
       inline bool operator!= (const Color &other) const {
         return (r!=other.r || g!=other.g || b!=other.b);
       }
-      uint8_t r, g, b;
+      float r, g, b;
     };
 
   public:
@@ -79,7 +79,7 @@ namespace octomap {
         
     inline Color getColor() const { return color; }
     inline void  setColor(Color c) {this->color = c; }
-    inline void  setColor(uint8_t r, uint8_t g, uint8_t b) {
+    inline void  setColor(float r, float g, float b) {
       this->color = Color(r,g,b); 
     }
 
@@ -87,7 +87,7 @@ namespace octomap {
 
     // has any color been integrated? (pure white is very unlikely...)
     inline bool isColorSet() const { 
-      return ((color.r != 255) || (color.g != 255) || (color.b != 255)); 
+      return ((color.r != 1.0) || (color.g != 1.0) || (color.b != 1.0)); 
     }
 
     void updateColorChildren();
@@ -128,36 +128,36 @@ namespace octomap {
     virtual bool isNodeCollapsible(const ColorOcTreeNode* node) const;
        
     // set node color at given key or coordinate. Replaces previous color.
-    ColorOcTreeNode* setNodeColor(const OcTreeKey& key, uint8_t r, 
-                                 uint8_t g, uint8_t b);
+    ColorOcTreeNode* setNodeColor(const OcTreeKey& key, float r, 
+                                 float g, float b);
 
     ColorOcTreeNode* setNodeColor(float x, float y, 
-                                 float z, uint8_t r, 
-                                 uint8_t g, uint8_t b) {
+                                 float z, float r, 
+                                 float g, float b) {
       OcTreeKey key;
       if (!this->coordToKeyChecked(point3d(x,y,z), key)) return NULL;
       return setNodeColor(key,r,g,b);
     }
 
     // integrate color measurement at given key or coordinate. Average with previous color
-    ColorOcTreeNode* averageNodeColor(const OcTreeKey& key, uint8_t r, 
-                                  uint8_t g, uint8_t b);
+    ColorOcTreeNode* averageNodeColor(const OcTreeKey& key, float r, 
+                                  float g, float b);
     
     ColorOcTreeNode* averageNodeColor(float x, float y, 
-                                      float z, uint8_t r, 
-                                      uint8_t g, uint8_t b) {
+                                      float z, float r, 
+                                      float g, float b) {
       OcTreeKey key;
       if (!this->coordToKeyChecked(point3d(x,y,z), key)) return NULL;
       return averageNodeColor(key,r,g,b);
     }
 
     // integrate color measurement at given key or coordinate. Average with previous color
-    ColorOcTreeNode* integrateNodeColor(const OcTreeKey& key, uint8_t r, 
-                                  uint8_t g, uint8_t b);
+    ColorOcTreeNode* integrateNodeColor(const OcTreeKey& key, float r, 
+                                  float g, float b);
     
     ColorOcTreeNode* integrateNodeColor(float x, float y, 
-                                      float z, uint8_t r, 
-                                      uint8_t g, uint8_t b) {
+                                      float z, float r, 
+                                      float g, float b) {
       OcTreeKey key;
       if (!this->coordToKeyChecked(point3d(x,y,z), key)) return NULL;
       return integrateNodeColor(key,r,g,b);
