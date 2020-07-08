@@ -26,8 +26,12 @@ int main(int argc, char** argv) {
     for (int y=-20; y<20; y++) {
       for (int z=-20; z<20; z++) {
         point3d endpoint ((float) x*0.05f+0.01f, (float) y*0.05f+0.01f, (float) z*0.05f+0.01f);
-        ColorOcTreeNode* n = tree.updateNode(endpoint, true); 
-        n->setColor(z*5+100,x*5+100,y*5+100); 
+        ColorOcTreeNode* n = tree.updateNode(endpoint, true);
+        float r,g,b;
+        r = (float)(z / 40.) + 0.5;
+        g = (float)(x / 40.) + 0.5;
+        b = (float)(y / 40.) + 0.5;
+        n->setColor(r,g,b);
       }
     }
   }
@@ -38,7 +42,7 @@ int main(int argc, char** argv) {
       for (int z=-30; z<30; z++) {
         point3d endpoint ((float) x*0.02f+2.0f, (float) y*0.02f+2.0f, (float) z*0.02f+2.0f);
         ColorOcTreeNode* n = tree.updateNode(endpoint, false); 
-        n->setColor(255,255,0); // set color to yellow
+        n->setColor(1.0,1.0,0); // set color to yellow
       }
     }
   }
@@ -151,7 +155,7 @@ int main(int argc, char** argv) {
     
     point3d newCoord(-2.0, -2.0, -2.0);
     ColorOcTreeNode* newNode = tree.updateNode(newCoord, true);
-    newNode->setColor(255,0,0);
+    newNode->setColor(1.0,0,0);
     EXPECT_TRUE(newNode != NULL);
     
     const size_t insertedSize = tree.size();
